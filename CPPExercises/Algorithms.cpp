@@ -33,8 +33,8 @@ void QuickSort(std::vector<int>& vec, const int& start, const int& end)
 
 	while (lInd < rInd)
 	{
-		for (; lInd <= end && vec[lInd] <= pivot; ++lInd);
-		for (; rInd >= start && vec[rInd] >= pivot; --rInd);
+		for (; lInd <= end && vec[lInd] < pivot; ++lInd);
+		for (; rInd >= start && vec[rInd] > pivot; --rInd);
 
 		if (lInd < rInd)
 		{
@@ -44,7 +44,7 @@ void QuickSort(std::vector<int>& vec, const int& start, const int& end)
 
 	}
 
-	QuickSort(vec, start, mid);
+	QuickSort(vec, start, mid - 1);
 	QuickSort(vec, mid + 1, end);
 
 }
