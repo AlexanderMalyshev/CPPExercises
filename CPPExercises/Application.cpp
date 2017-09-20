@@ -1,15 +1,11 @@
 #include "Algorithms.h"
-
-#include <iostream>
+#include "Tree.h"
 
 int main()
 {
-	std::vector<int> source;
-
-	GenrateVector(source, 10);
-	QuickSort(source, 0, source.size() - 1);
-
-	std::cout << source << std::endl;
+	MyTree mtr { new Node(1, nullptr, nullptr) };
+	mtr.GenerateTree(10);
+	mtr.PrintTree();
 
 	return 0;
 }

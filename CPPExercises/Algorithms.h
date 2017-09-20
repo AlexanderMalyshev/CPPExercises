@@ -12,5 +12,7 @@ std::ostream& operator << (std::ostream& o, const std::vector<Type>& v) {
 	return o;
 }
 
-void GenrateVector(std::vector<int>& vec, const int& size);
+void GenerateVector(std::vector<int>& vec, const int& size);
 void QuickSort(std::vector<int>& vec, const int& start, const int& end);
+int BinarySearch(std::vector<int>& vec, const int& item, const int& start, const int& end);
+bool IsSorted(std::vector<int>& vec);
