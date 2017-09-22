@@ -23,17 +23,17 @@ public:
 		right.reset(_right);
 	}
 
-	int GetData()
+	int GetData() const
 	{
 		return data;
 	}
 
-	Node* GetLeft()
+	Node* GetLeft() const
 	{
 		return left.get();
 	}
 
-	Node* GetRight()
+	Node* GetRight() const
 	{
 		return right.get();
 	}
