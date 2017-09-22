@@ -4,7 +4,7 @@
 int main()
 {
 	MyTree mtr { new Node(1, nullptr, nullptr) };
-	mtr.GenerateTree(3);
+	mtr.GenerateTree(4);
 	
 	std::cout << "Height: " << mtr.GetHeight() << std::endl;
 

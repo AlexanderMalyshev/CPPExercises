@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
-#include <vector>
+#include <list>
 #include <iostream>
 
 void MakeNode(Node* root, const int& level, const int& height)
@@ -14,7 +14,7 @@ void MakeNode(Node* root, const int& level, const int& height)
 	bool left = (((double) std::rand() / RAND_MAX) * 2) >= 1;
 	if (true)
 	{
-		int data = (int) (((double) std::rand() / RAND_MAX) * 100);
+		int data = (int) (((double) std::rand() / RAND_MAX) * 10);
 		root->AddLeft(new Node(data, nullptr, nullptr));
 		MakeNode(root->GetLeft(), level + 1, height);
 	}
@@ -22,7 +22,7 @@ void MakeNode(Node* root, const int& level, const int& height)
 	bool right = (((double) std::rand() / RAND_MAX) * 100) >= 1;
 	if (true)
 	{
-		int data = (int) (((double) std::rand() / RAND_MAX) * 100);
+		int data = (int) (((double) std::rand() / RAND_MAX) * 10);
 		root->AddRight(new Node(data, nullptr, nullptr));
 		MakeNode(root->GetRight(), level + 1, height);
 	}
@@ -67,42 +67,45 @@ int MyTree::GetHeight()
 	return GetTreeHeight(root.get());
 }
 
-void PrintTreeByLevels(std::vector<Node*>& nodes, const int& height, const int& level)
+void PrintTreeByLevels(std::list<Node*>& nodes, const int& height, const int& level)
 {
-	double width = std::pow(2.0, height + 2) / (std::pow(2.0, level) + 1);
+	double step = std::pow(2.0, height - level);
+
 	if (level > height)
 		return;
 
-	std::vector<Node*> newNodes;
-	for (unsigned int i = 0; i < nodes.size(); ++i)
+	std::list<Node*> newNodes;
+	std::for_each(nodes.cbegin(), nodes.cend(), [&newNodes, &step](const Node* node)
 	{
-		if (nodes[i] == nullptr)
+		if (node == nullptr)
 		{
-			double step = width * i;
 			newNodes.push_back(nullptr);
 			newNodes.push_back(nullptr);
 
-			for (int j = 0; j < width; ++j)
+			for (int j = 0; j < step * 2; ++j)
 				std::cout << " ";
 
-			continue;
+			return;
 		}
 
-		int numLength = nodes[i]->GetData() > 10 ? 2 : 1;
-		for (int j = 0; j < width; ++j)
+		for (int j = 0; j < step - 1; ++j)
 			std::cout << " ";
 
-		std::cout << nodes[i]->GetData();
-		newNodes.push_back(nodes[i]->GetLeft());
-		newNodes.push_back(nodes[i]->GetRight());
-	}
+		std::cout << node->GetData();
 
+		for (int j = 0; j < step; ++j)
+			std::cout << " ";
+
+		newNodes.push_back(node->GetLeft());
+		newNodes.push_back(node->GetRight());
+	});
+	
 	std::cout << std::endl;
 	PrintTreeByLevels(newNodes, height, level + 1);
 }
 
 void MyTree::PrintTree()
 {
-	std::vector<Node*> nodes { root.get() };
-	PrintTreeByLevels(nodes, GetHeight(), 1);
+	std::list<Node*> nodes { root.get() };
+	PrintTreeByLevels(nodes, GetHeight(), 0);
 }
