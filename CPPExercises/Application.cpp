@@ -10,5 +10,13 @@ int main()
 
 	mtr.PrintTree();
 
+	mtr.PrintTreeInOrder();
+	mtr.PrintTreePreOrder();
+	mtr.PrintTreePostOrder();
+
+	mtr.PrintTreeInOrderIteratively();
+	mtr.PrintTreePreOrderIteratively();
+	mtr.PrintTreePostOrderIteratively();
+
 	return 0;
 }

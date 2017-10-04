@@ -13,30 +13,11 @@ public:
 	{
 	}
 
-	void AddLeft(Node* _left)
-	{
-		left.reset(_left);
-	}
-
-	void AddRight(Node* _right)
-	{
-		right.reset(_right);
-	}
-
-	int GetData() const
-	{
-		return data;
-	}
-
-	Node* GetLeft() const
-	{
-		return left.get();
-	}
-
-	Node* GetRight() const
-	{
-		return right.get();
-	}
+	void AddLeft(Node* _left) { left.reset(_left); }
+	void AddRight(Node* _right)	{ right.reset(_right); }
+	int GetData() const	{ return data; }
+	Node* GetLeft() const {	return left.get(); }
+	Node* GetRight() const { return right.get(); }
 };
 
 class MyTree
@@ -53,4 +34,10 @@ public:
 	int GetHeight();
 
 	void PrintTree();
+	void PrintTreeInOrder();
+	void PrintTreePreOrder();
+	void PrintTreePostOrder();
+	void PrintTreeInOrderIteratively();
+	void PrintTreePreOrderIteratively();
+	void PrintTreePostOrderIteratively();
 };
