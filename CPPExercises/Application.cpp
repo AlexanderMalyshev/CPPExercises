@@ -10,9 +10,5 @@ int main()
 
 	mtr.PrintTree();
 
-	mtr.ConnectLayers();
-
-	mtr.PrintTree();
-
 	return 0;
 }
