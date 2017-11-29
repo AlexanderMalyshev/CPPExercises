@@ -29,7 +29,6 @@ void MakeNode(Node* root, const int& level, const int& height)
 	}
 }
 
-
 void MyTree::GenerateTree(const int& height)
 {
 #pragma warning(disable:4244)
@@ -173,29 +172,23 @@ void MyTree::PrintTreeInOrderIteratively()
 	std::cout << "PrintTreeInOrderIteratively:" << std::endl;
 
 	std::list<Node*> nodes { root.get() };
-	std::set<Node*> visited;
-	Node* node = nullptr;
+	Node* curr = root.get();
 
 	// L-V-R
-	while (!nodes.empty())
+	while (!nodes.empty() || curr != nullptr)
 	{
-		const Node* node = nodes.back();
-		
-		if (node->GetLeft() != nullptr && !contains(visited, node->GetLeft()))
+		if (curr != nullptr)
 		{
-			nodes.push_back(node->GetLeft());
+			nodes.push_back(curr);
+			curr = curr->GetLeft();
 			continue;
 		}
 
-		std::cout << node->GetData() << "  ";
-		visited.emplace(node);
+		Node* node = nodes.back();
 		nodes.pop_back();
 
-		if (node->GetRight() != nullptr)
-		{
-			nodes.push_back(node->GetRight());
-			continue;
-		}
+		std::cout << node->GetData() << " ";
+		curr = node->GetRight();
 	}
 	std::cout << std::endl;
 }

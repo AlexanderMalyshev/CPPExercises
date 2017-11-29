@@ -16,3 +16,4 @@ void GenerateVector(std::vector<int>& vec, const int& size);
 void QuickSort(std::vector<int>& vec, const int& start, const int& end);
 int BinarySearch(std::vector<int>& vec, const int& item, const int& start, const int& end);
 bool IsSorted(std::vector<int>& vec);
+void KthSmallestElements(std::vector<int>& vec, const int& k);

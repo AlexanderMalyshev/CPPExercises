@@ -18,14 +18,47 @@ void GenerateVector(std::vector<int>& vec, const int& size)
 	vec.resize(size);
 	for (int i = 0; i < size; ++i)
 	{
-		int elem = 0;
-		do
-		{
-			elem = (int) (((double) std::rand() / RAND_MAX) * 1000);
-		} while (std::find(vec.cbegin(), vec.cend(), elem) != vec.cend());
+		//int elem = 0;
+		//do
+		//{
+		//	elem = (int) (((double) std::rand() / RAND_MAX) * 10);
+		//} while (std::find(vec.cbegin(), vec.cend(), elem) != vec.cend());
 		
-		vec[i] = elem;
+		vec[i] = (int) (((double) std::rand() / RAND_MAX) * 10);
 	}
+}
+
+
+int Partition(std::vector<int>& vec, const int& start, const int& end, const int& mid)
+{
+	int pivot = vec[mid];
+	int lInd = start;
+	int rInd = end;
+
+	while (lInd < rInd)
+	{
+		for (; vec[lInd] <= pivot && lInd < rInd; ++lInd);
+		for (; vec[rInd] >= pivot && rInd > lInd; --rInd);
+
+		if (lInd < rInd)
+			swap(vec[lInd], vec[rInd]);
+	}
+
+	if (lInd == start)
+		swap(vec[lInd], vec[mid]);
+	else if (lInd == end && vec[lInd] <= pivot)
+		swap(vec[lInd], vec[mid]);
+	else if (mid <= lInd)
+	{
+		--lInd;
+		swap(vec[lInd], vec[mid]);
+	}
+	else
+	{
+		swap(vec[lInd], vec[mid]);
+	}
+
+	return lInd;
 }
 
 void QuickSort(std::vector<int>& vec, const int& start, const int& end)
@@ -33,23 +66,7 @@ void QuickSort(std::vector<int>& vec, const int& start, const int& end)
 	if (start >= end)
 		return;
 
-	int mid = start + (end - start) / 2;
-	int pivot = vec[mid];
-
-	int lInd = start;
-	int rInd = end;
-
-	while (lInd < rInd)
-	{
-		for (; lInd <= end && vec[lInd] < pivot; ++lInd);
-		for (; rInd >= start && vec[rInd] > pivot; --rInd);
-
-		if (lInd < rInd)
-		{
-			swap(vec[lInd], vec[rInd]);
-			mid = lInd == mid ? rInd : (mid == rInd ? lInd : mid);
-		}
-	}
+	int mid = Partition(vec, start, end, start + (end - start) / 2);
 
 	QuickSort(vec, start, mid - 1);
 	QuickSort(vec, mid + 1, end);
@@ -81,4 +98,17 @@ bool IsSorted(std::vector<int>& vec)
 	}
 
 	return true;
+}
+
+void KthSmallestElements(std::vector<int>& vec, const int& k)
+{
+	int start = 0;
+	int end = vec.size() - 1;
+	int kth = 0;
+	while (kth != k)
+	{
+		kth = Partition(vec, start, end, k);
+		start = k > kth ? kth : start;
+		end = k < kth ? kth : end;
+	}
 }
