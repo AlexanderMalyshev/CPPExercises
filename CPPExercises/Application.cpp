@@ -1,5 +1,6 @@
 #include "Algorithms.h"
 #include "Tree.h"
+#include "InorderTreeIterator.h"
 
 int main()
 {
@@ -9,6 +10,14 @@ int main()
 	mtr.PrintTree();
 
 	mtr.PrintTreeInOrderIteratively();
+
+	InorderTreeIterator iti(mtr.GetRoot());
+	while (auto node = iti.GetNext())
+	{
+		std::cout << node->GetData() << " ";
+	}
+
+	std::cout << std::endl;
 
 	return 0;
 }

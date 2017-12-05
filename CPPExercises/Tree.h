@@ -5,24 +5,24 @@
 class Node
 {
 	int data;
-	std::unique_ptr<Node> left;
-	std::unique_ptr<Node> right;
+	std::shared_ptr<Node> left;
+	std::shared_ptr<Node> right;
 
 public:
 	Node(int _data, Node* _left, Node* _right) : data { _data }, left { _left }, right { _right }
 	{
 	}
 
-	void AddLeft(Node* _left) { left.reset(_left); }
-	void AddRight(Node* _right)	{ right.reset(_right); }
+	void AddLeft(std::shared_ptr<Node> _left) { left = _left; }
+	void AddRight(std::shared_ptr<Node> _right)	{ right = _right; }
 	int GetData() const	{ return data; }
-	Node* GetLeft() const {	return left.get(); }
-	Node* GetRight() const { return right.get(); }
+	std::shared_ptr<Node> GetLeft() const {	return left; }
+	std::shared_ptr<Node> GetRight() const { return right; }
 };
 
 class MyTree
 {
-	std::unique_ptr<Node> root;
+	std::shared_ptr<Node> root;
 
 public:
 	MyTree(Node* _root) : root { _root }
@@ -30,7 +30,8 @@ public:
 	};
 
 	void GenerateTree(const int& height);
-	Node* GetElem(const int& data, Node* root);
+	std::shared_ptr<Node> GetRoot() { return root; }
+	std::shared_ptr<Node> GetElem(const int& data, std::shared_ptr<Node> root);
 	int GetHeight();
 
 	void PrintTree();

@@ -7,7 +7,7 @@
 #include <set>
 #include <iostream>
 
-void MakeNode(Node* root, const int& level, const int& height)
+void MakeNode(std::shared_ptr<Node> root, const int& level, const int& height)
 {
 	if (level == height)
 		return;
@@ -16,7 +16,7 @@ void MakeNode(Node* root, const int& level, const int& height)
 	if (left)
 	{
 		int data = (int) (((double) std::rand() / RAND_MAX) * 10);
-		root->AddLeft(new Node(data, nullptr, nullptr));
+		root->AddLeft(std::make_shared<Node>(data, nullptr, nullptr));
 		MakeNode(root->GetLeft(), level + 1, height);
 	}
 
@@ -24,7 +24,7 @@ void MakeNode(Node* root, const int& level, const int& height)
 	if (right)
 	{
 		int data = (int) (((double) std::rand() / RAND_MAX) * 10);
-		root->AddRight(new Node(data, nullptr, nullptr));
+		root->AddRight(std::make_shared<Node>(data, nullptr, nullptr));
 		MakeNode(root->GetRight(), level + 1, height);
 	}
 }
@@ -33,10 +33,10 @@ void MyTree::GenerateTree(const int& height)
 {
 #pragma warning(disable:4244)
 	std::srand(std::time(0));
-	MakeNode(root.get(), 0, height);
+	MakeNode(root, 0, height);
 }
 
-Node* MyTree::GetElem(const int& data, Node* root)
+std::shared_ptr<Node> MyTree::GetElem(const int& data, std::shared_ptr<Node> root)
 {
 	if (root == nullptr)
 	{
@@ -48,13 +48,13 @@ Node* MyTree::GetElem(const int& data, Node* root)
 	}
 	else
 	{
-		Node* left = GetElem(data, root->GetLeft());
-		Node* right = GetElem(data, root->GetRight());
+		std::shared_ptr<Node> left = GetElem(data, root->GetLeft());
+		std::shared_ptr<Node> right = GetElem(data, root->GetRight());
 		return left != nullptr ? left : right;
 	}
 }
 
-int GetTreeHeight(const Node* root)
+int GetTreeHeight(std::shared_ptr<Node> root)
 {
 	if (root == nullptr)
 		return 0;
@@ -64,18 +64,18 @@ int GetTreeHeight(const Node* root)
 
 int MyTree::GetHeight()
 {
-	return GetTreeHeight(root.get());
+	return GetTreeHeight(root);
 }
 
-void PrintTreeByLevels(std::list<Node*>& nodes, const int& height, const int& level)
+void PrintTreeByLevels(std::list<std::shared_ptr<Node>>& nodes, const int& height, const int& level)
 {
 	double step = std::pow(2.0, height - level);
 
 	if (level > height)
 		return;
 
-	std::list<Node*> newNodes;
-	std::for_each(nodes.cbegin(), nodes.cend(), [&newNodes, &step](const Node* node)
+	std::list<std::shared_ptr<Node>> newNodes;
+	std::for_each(nodes.cbegin(), nodes.cend(), [&newNodes, &step](std::shared_ptr<Node> node)
 	{
 		if (node == nullptr)
 		{
@@ -106,11 +106,11 @@ void PrintTreeByLevels(std::list<Node*>& nodes, const int& height, const int& le
 
 void MyTree::PrintTree()
 {
-	std::list<Node*> nodes { root.get() };
+	std::list<std::shared_ptr<Node>> nodes { root };
 	PrintTreeByLevels(nodes, GetHeight(), 0);
 }
 
-void PrintTreeInOrder(const Node* root)
+void PrintTreeInOrder(std::shared_ptr<Node> root)
 {
 	if (root == nullptr)
 		return;
@@ -123,11 +123,11 @@ void PrintTreeInOrder(const Node* root)
 void MyTree::PrintTreeInOrder()
 {
 	std::cout << "PrintTreeInOrder:" << std::endl;
-	::PrintTreeInOrder(root.get());
+	::PrintTreeInOrder(root);
 	std::cout << std::endl;
 }
 
-void PrintTreePreOrder(const Node* root)
+void PrintTreePreOrder(std::shared_ptr<Node> root)
 {
 	if (root == nullptr)
 		return;
@@ -140,11 +140,11 @@ void PrintTreePreOrder(const Node* root)
 void MyTree::PrintTreePreOrder()
 {
 	std::cout << "PrintTreePreOrder:" << std::endl;
-	::PrintTreePreOrder(root.get());
+	::PrintTreePreOrder(root);
 	std::cout << std::endl;
 }
 
-void PrintTreePostOrder(const Node* root)
+void PrintTreePostOrder(std::shared_ptr<Node> root)
 {
 	if (root == nullptr)
 		return;
@@ -157,7 +157,7 @@ void PrintTreePostOrder(const Node* root)
 void MyTree::PrintTreePostOrder()
 {
 	std::cout << "PrintTreePostOrder:" << std::endl;
-	::PrintTreePostOrder(root.get());
+	::PrintTreePostOrder(root);
 	std::cout << std::endl;
 }
 
@@ -171,8 +171,8 @@ void MyTree::PrintTreeInOrderIteratively()
 {
 	std::cout << "PrintTreeInOrderIteratively:" << std::endl;
 
-	std::list<Node*> nodes { root.get() };
-	Node* curr = root.get();
+	std::list<std::shared_ptr<Node>> nodes { };
+	std::shared_ptr<Node> curr = root;
 
 	// L-V-R
 	while (!nodes.empty() || curr != nullptr)
@@ -184,7 +184,7 @@ void MyTree::PrintTreeInOrderIteratively()
 			continue;
 		}
 
-		Node* node = nodes.back();
+		std::shared_ptr<Node> node = nodes.back();
 		nodes.pop_back();
 
 		std::cout << node->GetData() << " ";
@@ -197,46 +197,12 @@ void MyTree::PrintTreePreOrderIteratively()
 {
 	std::cout << "PrintTreePreOrderIteratively:" << std::endl;
 
-	std::list<Node*> nodes { root.get() };
-
-	// V-L-R
-	while (!nodes.empty())
-	{
-		const Node* node = nodes.back();
-		if (node == nullptr)
-		{
-			nodes.pop_back();
-			continue;
-		}
-
-		std::cout << node->GetData() << "  ";
-		nodes.pop_back();
-
-		nodes.push_back(node->GetRight());
-		nodes.push_back(node->GetLeft());
-	}
 	std::cout << std::endl;
 }
 
 void MyTree::PrintTreePostOrderIteratively()
 {
-	std::list<Node*> nodes { root.get() };
+	std::cout << "PrintTreePostOrderIteratively:" << std::endl;
 
-	// L-R-V
-	while (!nodes.empty())
-	{
-		const Node* node = nodes.back();
-		if (node == nullptr)
-		{
-			nodes.pop_back();
-			continue;
-		}
-
-		std::cout << node->GetData() << "  ";
-		nodes.pop_back();
-
-		nodes.push_back(node->GetRight());
-		nodes.push_back(node->GetLeft());
-	}
 	std::cout << std::endl;
 }
